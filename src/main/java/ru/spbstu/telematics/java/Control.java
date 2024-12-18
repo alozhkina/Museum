@@ -4,13 +4,16 @@ package ru.spbstu.telematics.java;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class Control {
     private boolean isOpen = false;
     private final Lock lock = new ReentrantLock(); // Объект блокировки для синхронизации потоков
     private final Condition museumOpen = lock.newCondition();
-    private int visitorCount = 0;
+    private final List<Integer> visitors = new ArrayList<>();
 
     public void openMuseum() {
         lock.lock(); // Захват блокировки для синхронизации доступа
@@ -45,8 +48,8 @@ public class Control {
             }
 
             // Когда музей открыт, посетитель может войти
-            visitorCount++;
-            System.out.println("Visitor-" + visitorId + " вошел в музей. Количество посетителей: " + visitorCount);
+            visitors.add(visitorId);
+            System.out.println("Visitor-" + visitorId + " вошел в музей. Количество посетителей: " + visitors.size());
         } finally {
             lock.unlock();
         }
@@ -55,8 +58,8 @@ public class Control {
     public void exitMuseum(int visitorId) {
         lock.lock();
         try {
-            visitorCount--;
-            System.out.println("Visitor-" + visitorId + " вышел из музея. Количество посетителей: " + visitorCount);
+            visitors.remove((Integer) visitorId); // Именно объект удаляю
+            System.out.println("Visitor-" + visitorId + " вышел из музея. Количество посетителей: " + visitors.size());
         } finally {
             lock.unlock();
         }
@@ -69,7 +72,19 @@ public class Control {
     public boolean hasVisitors() {
         lock.lock();
         try {
-            return visitorCount > 0;
+            return !visitors.isEmpty();
+        } finally {
+            lock.unlock();
+        }
+    }
+    public int getRandomVisitor() {
+        lock.lock();
+        try {
+            if (visitors.isEmpty()) {
+                throw new IllegalStateException("Нет посетителей в музее!");
+            }
+            int randomIndex = ThreadLocalRandom.current().nextInt(visitors.size());
+            return visitors.get(randomIndex);
         } finally {
             lock.unlock();
         }
