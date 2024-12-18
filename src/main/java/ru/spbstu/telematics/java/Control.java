@@ -66,5 +66,13 @@ public class Control {
         return isOpen;
     }
 
+    public boolean hasVisitors() {
+        lock.lock();
+        try {
+            return visitorCount > 0;
+        } finally {
+            lock.unlock();
+        }
+    }
 
 }
