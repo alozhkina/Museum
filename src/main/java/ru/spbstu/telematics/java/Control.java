@@ -62,4 +62,9 @@ public class Control {
         }
     }
 
+    public boolean isMuseumOpen() {
+        return isOpen;
+    }
+
+
 }
