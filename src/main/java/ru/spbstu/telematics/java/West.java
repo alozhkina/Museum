@@ -12,7 +12,7 @@ public class West implements Runnable {
         while (true) {
             if (!control.isMuseumOpen() && control.hasVisitors()) {
                 while (control.hasVisitors()) {
-                    int visitorId = control.getRandomVisitor();  // Получаем первого посетителя
+                    int visitorId = control.getRandomVisitor();
                     control.exitMuseum(visitorId);
                     try {
                         Thread.sleep(50);  // Задержка между выходами
@@ -25,7 +25,7 @@ public class West implements Runnable {
 
 
             if (control.hasVisitors()) {
-                int visitorId = control.getRandomVisitor();  // Получаем первого посетителя
+                int visitorId = control.getRandomVisitor();  
                 control.exitMuseum(visitorId);
             }
 
