@@ -12,9 +12,9 @@ public class Director implements Runnable {
         try {
             for (int i = 0; i < 3; i++) { // Музей открывается и закрывается 3 раза
                 control.openMuseum();
-                Thread.sleep(2000); // Музей работает 5 секунд
+                Thread.sleep(2000);
                 control.closeMuseum();
-                Thread.sleep(1000); // Перерыв перед следующим открытием
+                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
