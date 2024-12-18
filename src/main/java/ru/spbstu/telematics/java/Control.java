@@ -48,7 +48,17 @@ public class Control {
             visitorCount++;
             System.out.println("Visitor-" + visitorId + " вошел в музей. Количество посетителей: " + visitorCount);
         } finally {
-            lock.unlock();  // Освобождаем блокировку
+            lock.unlock();
+        }
+    }
+
+    public void exitMuseum(int visitorId) {
+        lock.lock();
+        try {
+            visitorCount--;
+            System.out.println("Visitor-" + visitorId + " вышел из музея. Количество посетителей: " + visitorCount);
+        } finally {
+            lock.unlock();
         }
     }
 
