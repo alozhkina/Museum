@@ -9,14 +9,32 @@ public class West implements Runnable {
 
     @Override
     public void run() {
-        int visitorId = 1; // Уникальный идентификатор для выхода
         while (true) {
+            if (!control.isMuseumOpen() && control.hasVisitors()) {
+                while (control.hasVisitors()) {
+                    int visitorId = control.getRandomVisitor();  // Получаем первого посетителя
+                    control.exitMuseum(visitorId);
+                    try {
+                        Thread.sleep(50);  // Задержка между выходами
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+                System.out.println("West: Все посетители покинули музей.");
+            }
+
+
+            if (control.hasVisitors()) {
+                int visitorId = control.getRandomVisitor();  // Получаем первого посетителя
+                control.exitMuseum(visitorId);
+            }
+
             try {
-                Thread.sleep(400);
-                control.exitMuseum(visitorId++); // Посетитель выходит из музея
+                Thread.sleep(1000);
+
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
-                break; // Завершаем поток при прерывании
+                break;
             }
         }
         System.out.println("West: Поток завершен.");
