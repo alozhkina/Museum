@@ -55,15 +55,6 @@ public class Control {
         }
     }
 
-    public void exitMuseum(int visitorId) {
-        lock.lock();
-        try {
-            visitors.remove((Integer) visitorId); // Именно объект удаляю
-            System.out.println("Visitor-" + visitorId + " вышел из музея. Количество посетителей: " + visitors.size());
-        } finally {
-            lock.unlock();
-        }
-    }
 
     public boolean isMuseumOpen() {
         return isOpen;
@@ -77,14 +68,13 @@ public class Control {
             lock.unlock();
         }
     }
-    public int getRandomVisitor() {
+
+    public void exitRandomVisitor() {
         lock.lock();
         try {
-            if (visitors.isEmpty()) {
-                throw new IllegalStateException("Нет посетителей в музее!");
-            }
-            int randomIndex = ThreadLocalRandom.current().nextInt(visitors.size());
-            return visitors.get(randomIndex);
+                int randomIndex = ThreadLocalRandom.current().nextInt(visitors.size());
+                int visitorId = visitors.remove(randomIndex);
+                System.out.println("Visitor-" + visitorId + " вышел из музея. Количество посетителей: " + visitors.size());
         } finally {
             lock.unlock();
         }
